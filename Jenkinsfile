@@ -23,8 +23,13 @@ pipeline {
             }
         }
         post{
+            always{
             success{
                 mail to:"pawarakshada13@gmail.com", subject:"SUCCESS ${currentBuild.fullDisplayName}", body: "All test cases are passed."
+            }
+            failure{
+                mail to:"pawarakshada13@gmail.com", subject:"FAILURE ${currentBuild.fullDisplayName}", body: "Test cases are failed."
+            }
             }
         }
         
