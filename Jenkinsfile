@@ -1,13 +1,10 @@
 pipeline {
     agent none
-    options {
-        skipStagesAfterUnstable()
-    }
     stages {
         stage('Build') {
             agent {
                 docker {
-                    image 'python:3-alpine'
+                    image 'python:3.9-alpine'
                 }
             }
             steps {
@@ -26,30 +23,27 @@ pipeline {
             }
             
         }
-        stage('Deliver') {
+		stage('Deliver') { 
             agent any
-                environment {
-                    VOLUME = '${pwd}:/src/'
-                    IMAGE =  'cdrx/pyinstaller-linux:python3'
-                }
-            
+            environment { 
+                VOLUME = '$(pwd)/sources:/src'
+                IMAGE = 'cdrx/pyinstaller-linux:python3'
+            }
             steps {
-                dir(path: env.BUILD_ID){
-                    unstash(name: 'compiled-results')
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE}  'pyinstaller -F library.py' "
-
+                dir(path: env.BUILD_ID) { 
+                    unstash(name: 'compiled-results') 
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F library.py'" 
                 }
             }
-            post{
-                success{
-                    archiveArtifacts "${env.BUILD_ID}/sources/dist/library"
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist' "
+            post {
+                success {
+                    archiveArtifacts "${env.BUILD_ID}/sources/dist/main" 
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
                 }
             }
         }
-    }
+	}	
+    
+ 
+		 
 }
-
-
-
-
