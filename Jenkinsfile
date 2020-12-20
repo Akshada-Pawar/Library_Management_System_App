@@ -31,7 +31,7 @@ pipeline {
             }
         }
         stage('Deliver') {
-            agent any {
+            agent {
                 environment {
                     VOLUME = '$ (pwd)/sources:/src'
                     IMAGE =  'cdrx/pyinstaller-linux:python3'
