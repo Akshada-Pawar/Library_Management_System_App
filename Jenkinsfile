@@ -26,7 +26,7 @@ pipeline {
             steps{
                 always{
                     mail to:"pawarakshada13@gmail.com", subject:"Status of pipeline: ${currentBuild.fullDisplayName}", 
-                   // body: "Library Management System Application keeps the track of the books present in the library. \n ${env.BUILD_URL} has result ${currentBuild.result}."
+                    body: "Library Management System Application keeps the track of the books present in the library. \n ${env.BUILD_URL} has result ${currentBuild.result}."
                 }
             }
         }
