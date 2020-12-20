@@ -22,13 +22,13 @@ pipeline {
                 sh 'py.test --junit-xml test-reports/results.xml sources/library_test.py' 
             }
         }
-        post{
+        stage('Email'){
             always{
             success{
-                mail to:"pawarakshada13@gmail.com", subject:"SUCCESS ${currentBuild.fullDisplayName}", body: "All test cases are passed."
+                mail to:"pawarakshada13@gmail.com", subject:"SUCCESS ${currentBuild.fullDisplayName}", body: "More info at: ${env.BUILD_URL} All test cases are passed."
             }
             failure{
-                mail to:"pawarakshada13@gmail.com", subject:"FAILURE ${currentBuild.fullDisplayName}", body: "Test cases are failed."
+                mail to:"pawarakshada13@gmail.com", subject:"FAILURE ${currentBuild.fullDisplayName}", body: "More info at: ${env.BUILD_URL} Test cases are failed."
             }
             }
         }
