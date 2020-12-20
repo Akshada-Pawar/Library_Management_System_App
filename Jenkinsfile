@@ -21,26 +21,33 @@ pipeline {
             steps {
                 sh 'py.test --junit-xml test-reports/results.xml sources/library_test.py' 
             }
+            post{
+                always{
+                    junit 'test-reports/result.xml'
+                }
+            }
         }
         stage('Deliver') {
-            agent {
-                docker {
-                    image 'cdrx/pyinstaller-linux:python2'
+            agent any {
+                environment {
+                    VOLUME = '$ (pwd)/sources:/src'
+                    IMAGE =  'cdrx/pyinstaller-linux:python3'
                 }
             }
             steps {
-                sh 'pyinstaller --onefile sources/library.py'
+                dir(path: env.BUILD_ID){
+                    unstash(name: 'compiled-results')
+                    sh "docker run --rm -v $(VOLUME) $(IMAGE) 'pyinstaller -F library.py'"
+
+                }
             }
-        }
-        stage('Email'){
-            steps{
-                always{
-                    mail to:"pawarakshada13@gmail.com", subject:"Status of pipeline: ${currentBuild.fullDisplayName}", 
-                    body: "Library Management System Application keeps the track of the books present in the library. \n ${env.BUILD_URL} has result ${currentBuild.result}."
+            post{
+                success{
+                    archiveArtifacts "${env.BUILD_ID}/sources/dist/library"
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
                 }
             }
         }
-        
     }
 }
 
