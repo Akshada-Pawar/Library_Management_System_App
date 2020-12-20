@@ -23,13 +23,11 @@ pipeline {
             }
         }
         stage('Email'){
-            always{
-            success{
-                mail to:"pawarakshada13@gmail.com", subject:"SUCCESS ${currentBuild.fullDisplayName}", body: "More info at: ${env.BUILD_URL} All test cases are passed."
-            }
-            failure{
-                mail to:"pawarakshada13@gmail.com", subject:"FAILURE ${currentBuild.fullDisplayName}", body: "More info at: ${env.BUILD_URL} Test cases are failed."
-            }
+            steps{
+                always{
+                    mail to:"pawarakshada13@gmail.com", subject:"Status of pipeline: ${currentBuild.fullDisplayName}", 
+                   // body: "Library Management System Application keeps the track of the books present in the library. \n ${env.BUILD_URL} has result ${currentBuild.result}."
+                }
             }
         }
         
