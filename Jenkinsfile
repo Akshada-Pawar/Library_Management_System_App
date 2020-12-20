@@ -30,7 +30,7 @@ pipeline {
             agent any
                 environment {
                     VOLUME = '/sources:/src'
-                    IMAGE =  'cdrx/pyinstaller-linux:python3'
+                    IMAGE =  'cdrx/pyinstaller-linux:python2'
                 }
             
             steps {
