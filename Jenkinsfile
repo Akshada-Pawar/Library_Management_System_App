@@ -24,11 +24,7 @@ pipeline {
             steps {
                 sh 'py.test --junit-xml test-reports/results.xml sources/library_test.py' 
             }
-            post{
-                always{
-                    junit 'test-reports/result.xml'
-                }
-            }
+            
         }
         stage('Deliver') {
             agent any
