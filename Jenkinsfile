@@ -36,7 +36,7 @@ pipeline {
             steps {
                 dir(path: env.BUILD_ID){
                     unstash(name: 'compiled-results')
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} pyinstaller library.py "
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} pyinstaller /sources/library.py "
 
                 }
             }
